@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">  
+    <title>Giphy Loader</title>  
+</head>
+<body >
+
+
+        <div class="btn-toolbar" id="buttonDiv"></div>   
+        
+        <div class="row">            
+
+            <div class="col-lg-8" id="gifDiv"></div>
+            
+            <div style="padding: right 20px;" class="col-lg-4">
+                <div class="row">
+                        <label class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-addon">Search Gifs:</span>
+                            <input id="gifInput" type="text" class="form-control">
+                            <span class="input-group-btn">
+                            <button id="addGifBtn" class="btn btn-default" type="button">Submit</button>
+                            </span>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+        
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    // "use strict";
+
+       
+$(document).ready();
+
+//  Initial array
+var topics = ["cats", "elephants", "puppies", "bunnies", "goats", "llamas", "owls"];
+
+
+//  Create the buttons on the page
+function renderButtons(){
+    $("#buttonDiv").empty();
+    for (var i=0; i < topics.length; i++) {
+        // console.log(topics.length)
+    var gifButton = $("<button>");
+        gifButton.addClass("btn btn-primary btn-lg gifBtn");
+        gifButton.attr("data-gif-value", topics[i]);
+        // console.log(topics[i]);
+        gifButton.text(topics[i]);
+        $("#buttonDiv").append(gifButton);
+        // console.log(gifButton);
+        // console.log(this);    
+    };
+
+    $(".gifBtn").on("click",  displayGifs); 
+};
+
+renderButtons();
+
+//  Add new buttons to page
+    $("#addGifBtn").on("click", function() {
+        var newGif = $("#gifInput").val().trim();
+        topics.push(newGif);
+        $("#gifInput").val("");
+        renderButtons();
+
+    });
+
+
+//  Display the Gifs!!!!!
+//  Grab the value of the button, add it to the search query, and display the gifs
+function displayGifs(event) { 
+    event.preventDefault();
+    var gif = $(this).attr("data-gif-value");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gif + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+    $.ajax({  url: queryURL, method: "GET"  })
+    
+    .then(function(response) {
+        // console.log(queryURL);
+        // console.log(response.data);
+
+        var gifResult = response.data;
+        for (var i = 0; i < gifResult.length; i++){
+        // console.log(gifResult.length);
+        
+            var gifImage = $("<img>");
+            gifImage.attr("src", gifResult[i].images.fixed_height_still.url);                        
+            gifImage.attr("data-animate", gifResult[i].images.fixed_height.url);
+            gifImage.attr("data-still", gifResult[i].images.fixed_height_still.url);
+            gifImage.attr("data-state", "animate");
+            gifImage.addClass("gif col-6 col-md-4");
+
+                var p = $("<p>").text("Rating: " + gifResult[i].rating);
+                    $("#gifDiv").prepend(p);                            
+                    $("#gifDiv").prepend(gifImage);
+            
+        }
+
+        // Stop/Start gif action
+        $(".gif").on("click", function() {  
+            console.log("clicked");
+            console.log(this);          
+                var state = $(this).attr("data-state");
+                if (state === "animate") {
+                    $(this).attr("src", $(this).attr("data-animate"));
+                    $(this).attr("data-state", "animate");
+                } else {
+                $(this).attr("src", $(this).attr("data-still"));
+                $(this).attr("data-state", "still");
+                }
+        })
+
+    })
+                
+}
+        
+
+        //Current issues:   
+                
+        
+        //Fixed issues:
+        //  Gifs need to populate accross the page with the P tag added
+        //  event.prevent(); creates reference error
+        //  Need to empty the input form after submit button is clicked
+        //  Gif variable is undefined.  The data-gif-value is not available in the function listed below.
+        //  The submit button will append the whole array over the current button array:  Used the .empty method to remove the buttons before new ones are entered.
+        //  The gif buttons don't work after submit button is pressed:  Fixed by creating seperate function for the on click listener
+
+ </script> 
+         
+
+    
+</body>
+</html>
