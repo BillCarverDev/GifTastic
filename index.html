@@ -13,14 +13,12 @@
     <div class="btn-toolbar container" id="buttonDiv" style="padding:20px"></div>
     
     <!-- Main container -->
-    <div class="container" style="padding: 10px; margin: 5px" >
+    <div class="container" style="margin: 5px" >
         
         
             
         <!-- Submit function appears here -->
             <div class="col-lg-4" style="float: right;">
-
-
                 
                 <div style="padding: 25px;" >
                     <div class="row">
@@ -36,11 +34,14 @@
                 </div>                  
                 
             </div> 
-
-            <!-- Gifs appear here -->
-        <div class="" id="gifDiv" style="float: left"></div>
-
     </div>
+
+    
+
+        <!-- Gifs appear here -->
+        <div id="gifDiv"></div>
+        
+    
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <script>
@@ -50,7 +51,7 @@
 $(document).ready();
 
 //  Initial array
-var topics = ["cats", "elephants", "puppies", "bunnies", "goats", "llamas", "owls"];
+var topics = ["cats", "elephants", "puppies", "goats", "llamas", "owls"];
 
 
 //  Create the buttons on the page
@@ -99,6 +100,8 @@ function displayGifs(event) {
         var gifResult = response.data;
         for (var i = 0; i < gifResult.length; i++){
         // console.log(gifResult.length);
+
+        var gifDiv = $("<div>");
         
             var gifImage = $("<img>");
             gifImage.attr("src", gifResult[i].images.fixed_height_still.url);                        
@@ -107,9 +110,13 @@ function displayGifs(event) {
             gifImage.attr("data-state", "still");
             gifImage.addClass("gif");
 
-                var p = $("<p>").text("Rating: " + gifResult[i].rating);
-                    $("#gifDiv").prepend(p);                            
-                    $("#gifDiv").prepend(gifImage);
+            var p = $("<p>").text("Rating: " + gifResult[i].rating);
+
+                    gifDiv.append(gifImage);
+                    gifDiv.append(p);
+                    $("#gifDiv").prepend(gifDiv);
+                
+                   
             
         }
 
