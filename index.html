@@ -5,37 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">  
     <title>Giphy Loader</title>  
 </head>
 <body >
 
-
-        <div class="btn-toolbar" id="buttonDiv"></div>   
+    <!-- Button Toolbar -->
+    <div class="btn-toolbar container" id="buttonDiv" style="padding:20px"></div>
+    
+    <!-- Main container -->
+    <div class="container" style="padding: 10px; margin: 5px" >
         
-        <div class="row">            
-
-            <div class="col-lg-8" id="gifDiv"></div>
+        
             
-            <div style="padding: right 20px;" class="col-lg-4">
-                <div class="row">
+        <!-- Submit function appears here -->
+            <div class="col-lg-4" style="float: right;">
+
+
+                
+                <div style="padding: 25px;" >
+                    <div class="row">
                         <label class="control-label"></label>
                         <div class="input-group">
-                            <span class="input-group-addon">Search Gifs:</span>
-                            <input id="gifInput" type="text" class="form-control">
+                            <span class="input-group-addon glyphicon glyphicon-search"></span>
+                            <input id="gifInput" type="text" class="form-control" placeholder="Search for...">
                             <span class="input-group-btn">
-                            <button id="addGifBtn" class="btn btn-default" type="button">Submit</button>
+                                <button id="addGifBtn" class="btn btn-default" type="button">Submit</button>
                             </span>
                         </div>
                     </div>
-            </div>
+                </div>                  
+                
+            </div> 
 
-        </div>
-        
+            <!-- Gifs appear here -->
+        <div class="" id="gifDiv" style="float: left"></div>
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <script>
     // "use strict";
@@ -98,8 +104,8 @@ function displayGifs(event) {
             gifImage.attr("src", gifResult[i].images.fixed_height_still.url);                        
             gifImage.attr("data-animate", gifResult[i].images.fixed_height.url);
             gifImage.attr("data-still", gifResult[i].images.fixed_height_still.url);
-            gifImage.attr("data-state", "animate");
-            gifImage.addClass("gif col-6 col-md-4");
+            gifImage.attr("data-state", "still");
+            gifImage.addClass("gif");
 
                 var p = $("<p>").text("Rating: " + gifResult[i].rating);
                     $("#gifDiv").prepend(p);                            
@@ -110,9 +116,10 @@ function displayGifs(event) {
         // Stop/Start gif action
         $(".gif").on("click", function() {  
             console.log("clicked");
-            console.log(this);          
+            // console.log(this);          
                 var state = $(this).attr("data-state");
-                if (state === "animate") {
+                // console.log(state);
+                if (state === "still") {
                     $(this).attr("src", $(this).attr("data-animate"));
                     $(this).attr("data-state", "animate");
                 } else {
@@ -136,6 +143,11 @@ function displayGifs(event) {
         //  Gif variable is undefined.  The data-gif-value is not available in the function listed below.
         //  The submit button will append the whole array over the current button array:  Used the .empty method to remove the buttons before new ones are entered.
         //  The gif buttons don't work after submit button is pressed:  Fixed by creating seperate function for the on click listener
+
+        //Features:
+        //
+        //Added glyphicon to input group addon
+        //Added placeholder to input form
 
  </script> 
          
